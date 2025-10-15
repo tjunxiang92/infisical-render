@@ -32,6 +32,8 @@ services:
   healthCheckPath: /api/status
   envVars:
   - fromGroup: infisical-shared
+  - key: PORT
+    value: 8080
   - key: DB_CONNECTION_URI
     fromDatabase:
       name: infisical-db

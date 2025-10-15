@@ -1,34 +1,44 @@
-services:
-  - type: web
-    name: infisical-backend
-    env: docker
-    image:
-      url: infisical/infisical:latest-postgres
-    plan: starter
-    autoDeploy: true
-    region: singapore
-    envVars:
-      - key: PORT
-        value: 8080
-      - key: NODE_ENV
-        value: production
-      - key: DATABASE_URL
-        fromDatabase:
-          name: infisical-db
-          property: connectionString
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: infisical-redis
-          property: connectionString
-
-  - type: redis
-    name: infisical-redis
-    plan: starter
-    ipAllowList: []
-
 databases:
-  - name: infisical-db
-    databaseName: infisical
-    user: infisical
-    plan: starter
+- name: infisical-db
+  databaseName: infisical
+  user: infisical
+  plan: basic-256mb
+  diskSizeGB: 1
+  region: singapore
+
+envVarGroups:
+- name: infisical-shared
+  envVars:
+  - key: NODE_ENV
+    value: production
+  # Render detects the listening port via $PORT (no `port:` field in blueprint)
+  - key: PORT
+    value: 8080
+
+services:
+- type: web
+  name: infisical-backend
+  autoDeploy: true
+  plan: Starter
+  region: singapore
+  env: docker
+  image:
+    url: infisical/infisical:latest-postgres
+  envVars:
+  - fromGroup: infisical-shared
+  - key: DATABASE_URL
+    fromDatabase:
+      name: infisical-db
+      property: connectionString
+  - key: REDIS_URL
+    fromService:
+      name: infisical-redis
+      type: redis
+      property: connectionString
+
+- type: redis
+  name: infisical-redis
+  autoDeploy: true
+  plan: Starter
+  region: singapore
+  ipAllowList: []

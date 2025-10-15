@@ -30,7 +30,7 @@ services:
   plan: starter
   region: singapore
   image:
-    url: infisical/infisical:v0.88.1-postgres
+    url: infisical/infisical:latest-postgres
   healthCheckPath: /api/status
   envVars:
   - fromGroup: infisical-shared

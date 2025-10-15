@@ -4,16 +4,14 @@ services:
     env: docker
     image:
       url: infisical/infisical:latest-postgres
-      # pullPolicy defaults to always for public images on Render
     plan: starter
     autoDeploy: true
     region: singapore
-    # Your app listens on 8080 inside the container (was 80:8080 in compose)
-    port: 8080
     envVars:
+      - key: PORT
+        value: 8080
       - key: NODE_ENV
         value: production
-      # Use Render-managed Postgres + Redis connection strings
       - key: DATABASE_URL
         fromDatabase:
           name: infisical-db
@@ -23,13 +21,11 @@ services:
           type: redis
           name: infisical-redis
           property: connectionString
-    # Optional health check path if your app exposes one:
-    # healthCheckPath: /health
 
   - type: redis
     name: infisical-redis
     plan: starter
-    ipAllowList: []        # private by default
+    ipAllowList: []
 
 databases:
   - name: infisical-db

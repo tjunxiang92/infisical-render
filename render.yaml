@@ -38,6 +38,6 @@ services:
 
 - type: redis
   name: infisical-redis
-  plan: Starter
+  plan: standard
   region: singapore
   ipAllowList: []

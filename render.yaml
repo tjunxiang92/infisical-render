@@ -11,12 +11,13 @@ envVarGroups:
   envVars:
   - key: NODE_ENV
     value: production
-  # Critical: Generate secure random values for these keys in production
-  # Use: openssl rand -base64 32
+  # CRITICAL: After deployment, manually set these in Render dashboard:
+  # ENCRYPTION_KEY: openssl rand -hex 16 (16 byte hex string)
+  # AUTH_SECRET: openssl rand -base64 32 (32 byte base64 string)
   - key: ENCRYPTION_KEY
-    generateValue: true
+    sync: false
   - key: AUTH_SECRET
-    generateValue: true
+    sync: false
   - key: SITE_URL
     value: http://localhost:8080
 

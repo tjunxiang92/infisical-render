@@ -11,6 +11,14 @@ envVarGroups:
   envVars:
   - key: NODE_ENV
     value: production
+  # Critical: Generate secure random values for these keys in production
+  # Use: openssl rand -base64 32
+  - key: ENCRYPTION_KEY
+    generateValue: true
+  - key: AUTH_SECRET
+    generateValue: true
+  - key: SITE_URL
+    value: http://localhost:8080
 
 services:
 - type: web
@@ -24,9 +32,7 @@ services:
   healthCheckPath: /api/status
   envVars:
   - fromGroup: infisical-shared
-  - key: PORT
-    value: 8080
-  - key: DATABASE_URL
+  - key: DB_CONNECTION_URI
     fromDatabase:
       name: infisical-db
       property: connectionString

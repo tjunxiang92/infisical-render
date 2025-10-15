@@ -26,7 +26,7 @@ services:
   name: infisical-backend
   runtime: image
   autoDeploy: true
-  plan: starter
+  plan: standard
   region: singapore
   image:
     url: infisical/infisical:latest-postgres

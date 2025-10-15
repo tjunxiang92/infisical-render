@@ -3,7 +3,7 @@ databases:
   databaseName: infisical
   user: infisical
   plan: basic-256mb
-  diskSizeGB: 1
+  diskSizeGB: 5
   region: singapore
 
 envVarGroups:
@@ -11,19 +11,27 @@ envVarGroups:
   envVars:
   - key: NODE_ENV
     value: production
-  # Render detects the listening port via $PORT (no `port:` field in blueprint)
-  - key: PORT
-    value: 8080
+  # Critical: Generate secure random values for these keys in production
+  # Use: openssl rand -base64 32
+  - key: ENCRYPTION_KEY
+    generateValue: true
+  - key: JWT_SECRET
+    generateValue: true
+  - key: AUTH_SECRET
+    generateValue: true
+  - key: SITE_URL
+    sync: false
 
 services:
 - type: web
   name: infisical-backend
+  runtime: image
   autoDeploy: true
-  plan: Starter
+  plan: starter
   region: singapore
-  env: docker
   image:
-    url: infisical/infisical:latest-postgres
+    url: infisical/infisical:v0.88.1-postgres
+  healthCheckPath: /api/status
   envVars:
   - fromGroup: infisical-shared
   - key: DATABASE_URL
@@ -38,6 +46,6 @@ services:
 
 - type: redis
   name: infisical-redis
-  plan: standard
+  plan: starter
   region: singapore
   ipAllowList: []
